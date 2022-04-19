@@ -56,12 +56,16 @@ public:
 
     template<typename F,typename... Args>
     auto submit(F&& f,Args&&... args)->std::future<decltype(f(args...))>{
-        auto taskPtr=std::make_shared<std::packaged_task<decltype(f(args...))()>>(
-            std::bind(std::forward<F>(f),std::forward<Args>(args)...)
+        //make_shared<type>(初始化变量)
+        auto taskPtr=std::make_shared< std::packaged_task<decltype(f(args...))()> >( 
+            std::bind(std::forward<F>(f),std::forward<Args>(args)...) //forward 完美转发
         );
         {
             std::unique_lock<std::mutex>lk(m_mutex);
             if(m_stop) throw std::runtime_error("submit on stopped ThreadPool");
+            //[捕获列表] 
+            // Lambda 表达式内部函数体在默认情况下是不能够使用函数体外部的变量的， 
+            // 这时候捕获列表可以起到传递外部数据的作用
             tasks.emplace([taskPtr](){ (*taskPtr)(); });
         }
         m_cv.notify_one();
