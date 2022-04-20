@@ -17,7 +17,14 @@ public:
     HTTPconnection();
     ~HTTPconnection();
 
-    void 
+    void initHTTPConn(int socketFd, const sockaddr_in& addr);
+    
+    //关闭http连接的接口
+    void closeHTTPConn();
+
+    static const char* srcDir;
+    static std::atomic<int> userCount;
+    
 private:
     int fd_; //http 连接描述符
     struct sockaddr_in addr_;
