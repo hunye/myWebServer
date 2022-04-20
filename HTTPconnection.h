@@ -21,7 +21,23 @@ public:
     
     //关闭http连接的接口
     void closeHTTPConn();
+    //处理http连接接口 主要分为resquest解析和response生成
+    bool handleHTTPConn();
 
+    //其他方法
+    const char* getIP() const;
+    int getPort() const;
+    sockaddr_in getAddr() const;
+
+    int writeBytes(){
+        return iov_[1].iov_len+iov_[0].iov_len;
+    }
+
+    // bool isKeepAlive() const{
+
+    // }
+
+    static bool isET;
     static const char* srcDir;
     static std::atomic<int> userCount;
     
