@@ -54,6 +54,6 @@ private:
 
     HTTPrequest request_;
     HTTPresponse response_;
-}
+};
 
 #endif
